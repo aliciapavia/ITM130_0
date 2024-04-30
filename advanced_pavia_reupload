@@ -1,0 +1,217 @@
+'''Python: Advanced
+
+70 points
+
+This assignment will develop your ability to manipulate data.
+We expect that this assignment will equip you to understand
+    Python tutorials.
+
+Please refer to the file `advanced_sample_data.py` for examples of:
+- the `social_graph` parameter for the relationship_status item
+- the `board` parameter for the tic_tac_toe item
+- the `route_map` parameter for the eta item
+'''
+social_graph = {
+    "@bongolpoc":{"first_name":"Joselito",
+                  "last_name":"Olpoc",
+                  "following":[
+                  ]
+    },
+    "@joaquin":  {"first_name":"Joaquin",
+                  "last_name":"Gonzales",
+                  "following":[
+                      "@chums","@jobenilagan"
+                  ]
+    },
+    "@chums" : {"first_name":"Matthew",
+                "last_name":"Uy",
+                "following":[
+                    "@bongolpoc","@miketan","@rudyang","@joeilagan"
+                ]
+    },
+    "@jobenilagan":{"first_name":"Joben",
+                   "last_name":"Ilagan",
+                   "following":[
+                    "@eeebeee","@joeilagan","@chums","@joaquin"
+                   ]
+    },
+    "@joeilagan":{"first_name":"Joe",
+                  "last_name":"Ilagan",
+                  "following":[
+                    "@eeebeee","@jobenilagan","@chums"
+                  ]
+    },
+    "@eeebeee":  {"first_name":"Elizabeth",
+                  "last_name":"Ilagan",
+                  "following":[
+                    "@jobenilagan","@joeilagan"
+                  ]
+    },
+}
+
+def relationship_status(from_member, to_member, social_graph):
+    to_followers = social_graph[to_member]['following']
+    from_followers = social_graph[from_member]['following']
+
+    def forward_rel(from_list):
+        index = 0
+        for n in from_list:
+            user = to_followers[index]
+            #print(user)
+            if user == from_member:
+                return True
+            else:
+                index = index + 1
+
+        return False
+    
+    def backward_rel(to_list):
+        index = 0
+        for n in (to_list):
+            user = from_followers[index]
+            #print(user)
+            if user == to_member:
+                return True
+            else:
+                index = index + 1
+
+        return False
+    
+    if (forward_rel(to_followers)) == True and (backward_rel(from_followers)) == True:
+        friends = "friends"
+        return friends
+    elif (forward_rel(to_followers)) == False and (backward_rel(from_followers)) == True:
+        follows = "follower"
+        return follows
+    elif (forward_rel(to_followers)) == True and (backward_rel(from_followers)) == False:
+        followed_by="followed by"
+        return followed_by
+    else:
+        no_rel = "no relationship"
+        return no_rel
+
+
+def tic_tac_toe(board):
+    xwinner = ['X', 'X', 'X']
+    owinner = ['O', 'O', 'O']
+    # Write a function for each win condition
+
+    # Win condition 1: horizontal win
+    def horizontal_win(check_board):
+        result = 'NO WINNER'
+        for r in range(len(check_board)):
+            if check_board[r] == xwinner:
+                result = 'X'
+                return result
+            elif check_board[r] == owinner:
+                result = 'O'
+                return result
+        return result
+
+    # Win condition 2: vertical win
+    def vertical_win(check_board):
+        win_result = 'NO WINNER'
+        column_num = 0
+
+        while column_num < 3:
+            
+            index_check = []
+        
+            for r in range(len(check_board)):
+                index_check.append(check_board[r][column_num])
+            
+            if index_check == xwinner:
+                win_result = 'X'
+                return win_result
+            
+            elif index_check == owinner:
+                win_result = 'O'
+                return win_result
+            
+            column_num = column_num + 1
+
+        return win_result
+
+    # Win condition 3: diagonal win
+    def diagonal_win(check_board):
+        win_result = 'NO WINNER'
+        row_num = 1
+        column_num = 1
+
+        for n in range(len(check_board)):
+        
+            # check the 3 x 3's they're easy
+
+            if check_board[row_num][column_num] == check_board[row_num - 1][column_num - 1]:
+                
+                if check_board[row_num + 1][column_num + 1] and check_board[row_num][column_num] == 'X':
+                    win_result = 'X'
+                    return win_result
+                
+                elif check_board[row_num + 1][column_num + 1] and check_board[row_num][column_num] == 'O':
+                    win_result = 'O'
+                    return win_result
+                
+                else:
+                    row_num = row_num + 1
+                    column_num = column_num + 1
+
+        return win_result
+    
+    if horizontal_win(board) == 'NO WINNER':
+        if vertical_win(board) == 'NO WINNER':
+            if diagonal_win(board) == 'NO WINNER':
+                return "NO WINNER"
+            else: 
+                return diagonal_win(board)
+        else:
+            return vertical_win(board)
+    else:
+        return horizontal_win(board)
+    #not guds
+
+route_map = {
+     ("upd","admu"):{
+         "travel_time_mins":10
+     },
+     ("admu","dlsu"):{
+         "travel_time_mins":35
+     },
+     ("dlsu","upd"):{
+         "travel_time_mins":55
+     }
+}
+
+route_map = {
+    ('a1', 'a2'): {
+        'travel_time_mins': 10
+    },
+    ('a2', 'b1'): {
+        'travel_time_mins': 10230
+    },
+    ('b1', 'a1'): {
+        'travel_time_mins': 1
+    }
+}
+
+def eta(first_stop, second_stop, route_map):
+    try:
+        return route_map[(first_stop, second_stop)]['travel_time_mins']
+    except KeyError:
+        total_time = 0
+
+        # Start from any point in the route map
+        start_point = next(iter(route_map))
+
+        current_stop = start_point
+        visited_stops = set()
+
+        # Traverse the circular route until we return to the starting point
+        while current_stop != second_stop:
+            total_time += route_map[current_stop]['travel_time_mins']
+            visited_stops.add(current_stop)
+            current_stop = current_stop[1], current_stop[0]  # Move to the next stop in the route map
+
+        return total_time
+        #not_guds
+
