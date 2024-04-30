@@ -1,0 +1,25 @@
+'''Python: Basic
+
+15 points
+
+This assignment will develop your familiarity with doing simple computations in Python.
+'''
+
+def savings(gross_pay, tax_rate, expenses):
+    take_homeTax = (gross_pay*tax_rate)
+    take_home = int(gross_pay-take_homeTax)
+    take_home = take_home - expenses
+    return take_home
+
+savings(2500000, 0.15, 20000)
+
+def material_waste(total_material, material_units, num_jobs, job_consumption):
+    return (str(total_material-(num_jobs*job_consumption)) + material_units)
+
+material_waste(10000, "kg", 3, 150)
+
+
+def interest(principal, rate, periods):
+    interest = int(principal+(principal*rate*periods))
+    return(interest)
+interest(10000,2.5,10)
