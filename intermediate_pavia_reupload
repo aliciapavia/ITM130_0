@@ -1,0 +1,99 @@
+def shift_letter(letter, shift):      
+    if ord(letter) > 64 and ord(letter) < 90:
+        #check if letter
+        decoded = ord(letter) + shift%26
+        if decoded > 90:
+            decoded = ord(letter) + shift%26 - 26
+            return chr(decoded)
+        return chr(decoded)
+    else:
+        return letter
+    #guds na
+
+def caesar_cipher(message, shift):
+    shifted_message = ""
+    for letter in message:
+        decoded = ord(letter) + shift%26
+        if  ord(letter) > 64 and  ord(letter) < 91:
+            if decoded > 64 and decoded < 91:
+            #check if letter
+                shifted_message += chr(decoded)
+            elif decoded > 90:
+            #fix the range
+                decoded = ord(letter) + shift%26 - 26
+                shifted_message += chr(decoded)
+            elif decoded < 65:
+                decoded = ord(letter) + shift%26 + 26
+                shifted_message += chr(decoded)
+        else:
+            shifted_message += letter
+            
+    return  shifted_message
+    #guds na
+
+def shift_by_letter(letter, letter_shift):
+    shift_num = ord(letter_shift) - 65
+    if (ord(letter) + shift_num) > 90:
+        return(chr(ord(letter) + shift_num - 26))
+    elif (ord(letter) + shift_num) < 65:
+        return(" ")
+    else:
+        return(chr(ord(letter) + shift_num))
+    #guds na
+
+
+def vigenere_cipher(message, key):
+    new_message = ""
+    key_length = len(key)
+    key_index = 0
+
+    # Iterate over each character in the message
+    for char in message:
+        if ord(char) < 91 and ord(char) > 64 :  # Check if the character is alphabetic
+            
+            # Calculate the shift value for the current character based on the key
+            key_char = key[key_index % key_length]
+            shift = ord(key_char) - ord('A')
+            new_char = chr(((ord(char) - ord('A') + shift) % 26) + ord('A'))
+
+            # Append the encoded character to the encoded message
+            new_message += new_char
+            
+            # Move to the next character in the key
+            key_index += 1
+
+        else:
+            # Keep non-alphabetic characters unchanged
+            new_message += char
+    
+    return new_message
+    #not guds
+
+
+def scytale_cipher(message, shift):
+    n = len(message)
+    columns = (n + shift - 1) // shift
+    padded_message = message.ljust(columns * shift, '_') 
+    ciphertext = ""
+
+    for col in range(columns):
+        for row in range(shift):
+            ciphertext += padded_message[row * columns + col]
+
+    return ciphertext
+    #not guds
+
+
+def scytale_decipher(message, shift):
+    n = len(message)
+    columns = (n + shift - 1) // shift
+    padded_message = message.ljust(columns * shift, '_') 
+    reread = ""
+
+    for col in range(columns):
+        for row in range(shift):
+            reread += padded_message[row * columns + col]
+
+    return reread
+    #not guds
+
